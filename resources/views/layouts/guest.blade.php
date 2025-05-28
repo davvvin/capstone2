@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- Judul akan diambil dari apa yang di-pass ke komponen layout atau default --}}
-    <title>{{ $title ?? config('app.name', 'Laravel') }}</title>
+    <title>{{ $title ?? View::getSection('title', config('app.name', 'Laravel')) }}</title>
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -77,7 +77,11 @@
         </nav>
 
         <main class="flex-grow">
-            {{ $slot }}
+            @isset($slot)
+                {{ $slot }}
+            @else
+                @yield('content')
+            @endisset
         </main>
 
         <footer class="bg-white border-t border-gray-200">

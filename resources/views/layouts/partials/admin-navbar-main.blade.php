@@ -64,7 +64,7 @@
                         <div class="message-notif-scroll scrollbar-outer">
                             <div class="notif-center">
                                 <a href="#">
-                                    <div class="notif-img"><img src="{{ asset('admin-template/assets/img/jm_denis.jpg') }}" alt="Img Profile"/></div>
+                                    <div class="notif-img"><img src="{{ asset('admin-template/img/jm_denis.jpg') }}" alt="Img Profile"/></div>
                                     <div class="notif-content"><span class="subject">Jimmy Denis</span><span class="block">How are you ?</span><span class="time">5 minutes ago</span></div>
                                 </a>
                             </div>
@@ -137,7 +137,7 @@
                 >
                     <div class="avatar-sm">
                         <img
-                            src="{{ asset('admin-template/assets/img/profile.jpg') }}" {{-- Consider dynamic user avatar --}}
+                            src="{{ asset('admin-template/img/profile.jpg') }}" {{-- Consider dynamic user avatar --}}
                             alt="..."
                             class="avatar-img rounded-circle"
                         />
@@ -153,7 +153,7 @@
                             <div class="user-box">
                                 <div class="avatar-lg">
                                     <img
-                                        src="{{ asset('admin-template/assets/img/profile.jpg') }}" {{-- Consider dynamic user avatar --}}
+                                        src="{{ asset('admin-template/img/profile.jpg') }}" {{-- Consider dynamic user avatar --}}
                                         alt="image profile"
                                         class="avatar-img rounded"
                                     />

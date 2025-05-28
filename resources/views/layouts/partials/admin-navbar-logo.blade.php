@@ -2,7 +2,7 @@
     <div class="logo-header" data-background-color="dark">
         <a href="{{ url('/') }}" class="logo"> {{-- Consider using named route --}}
             <img
-                src="{{ asset('admin-template/assets/img/kaiadmin/logo_light.svg') }}"
+                src="{{ asset('admin-template/img/kaiadmin/logo_light.svg') }}"
                 alt="navbar brand"
                 class="navbar-brand"
                 height="20"
