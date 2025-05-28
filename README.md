@@ -8,11 +8,11 @@
 </p>
 
 ## To run the program do,
-composer install
-npm install
-npm run dev
-Forward Engineer mwb
-php artisan db:seed
+- composer install
+- npm install
+- npm run dev
+- Forward Engineer mwb
+- php artisan db:seed
 
 ## About Laravel
 
