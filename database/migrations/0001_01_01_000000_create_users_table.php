@@ -11,30 +11,26 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
-        });
-
-        Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
-        });
-
-        Schema::create('sessions', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
-            $table->string('ip_address', 45)->nullable();
-            $table->text('user_agent')->nullable();
-            $table->longText('payload');
-            $table->integer('last_activity')->index();
-        });
+        if (!Schema::hasTable('users')) {
+            Schema::create('users', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->string('email')->unique();
+                $table->timestamp('email_verified_at')->nullable();
+                $table->string('password');
+                $table->boolean('is_active')->default(true); // Kolom tambahan kita
+                $table->rememberToken();
+                $table->timestamps();
+            });
+        } else {
+            // Jika tabel users sudah ada, periksa apakah kolom 'is_active' sudah ada
+            if (!Schema::hasColumn('users', 'is_active')) {
+                Schema::table('users', function (Blueprint $table) {
+                    $table->boolean('is_active')->default(true)->after('password'); // Tambahkan kolom is_active
+                });
+            }
+            // Anda bisa menambahkan pemeriksaan kolom lain di sini jika diperlukan
+        }
     }
 
     /**
@@ -42,8 +38,11 @@ return new class extends Migration
      */
     public function down(): void
     {
+        // Logika untuk down() bisa lebih kompleks jika Anda hanya ingin meng-drop kolom 'is_active'
+        // Namun, untuk kasus umum, jika migrasi ini di-rollback, tabel users akan di-drop.
+        // Jika Anda ingin lebih hati-hati, Anda bisa mengomentari Schema::dropIfExists('users');
+        // dan hanya meng-drop kolom yang ditambahkan jika itu adalah modifikasi.
+        // Untuk Breeze, biasanya drop tabelnya.
         Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
-        Schema::dropIfExists('sessions');
     }
 };
