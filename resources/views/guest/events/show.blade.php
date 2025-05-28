@@ -8,8 +8,8 @@
         @if($event->poster_url)
             <img src="{{ asset('storage/' . $event->poster_url) }}" alt="Poster {{ $event->name }}" class="w-full h-64 md:h-96 object-cover">
         @else
-            <div class="w-full h-64 md:h-96 bg-gray-200 flex items-center justify-center">
-                <span class="text-gray-500 text-xl">[Gambar Poster Event]</span>
+            <div class="w-full h-64 md:h-96 bg-gray-300 flex items-center justify-center">
+                <i class="fas fa-image fa-5x text-gray-400"></i>
             </div>
         @endif
 
@@ -55,11 +55,22 @@
                     </a>
                 @endguest
                 @auth
-                    {{-- Tombol ini akan relevan jika pengguna sudah login dan merupakan member --}}
-                    {{-- Logika untuk menampilkan tombol daftar event untuk member akan ada di bagian Member --}}
-                    <a href="{{ route('member.events.register.create', $event->id) }}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300">
-                        Daftar Event Ini
-                    </a>
+                    @if(Auth::user()->hasRole('member'))
+                        {{-- Cek apakah user sudah terdaftar di event ini atau belum --}}
+                        @php
+                            $isRegistered = Auth::user()->eventRegistrations()->where('event_id', $event->id)->exists();
+                        @endphp
+                        @if($isRegistered)
+                            <span class="bg-gray-400 text-white font-bold py-3 px-6 rounded-lg text-lg">Anda Sudah Terdaftar</span>
+                        @else
+                            <a href="{{ route('member.events.register.create', $event->id) }}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300">
+                                Daftar Event Ini
+                            </a>
+                        @endif
+                    @else
+                     {{-- Jika bukan member, mungkin tampilkan pesan lain atau tidak ada tombol daftar --}}
+                     <p class="text-gray-600 mt-4">Hanya member yang dapat mendaftar event.</p>
+                    @endif
                 @endauth
             </div>
         </div>
