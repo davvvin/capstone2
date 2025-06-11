@@ -22,7 +22,6 @@
             | App by YourName/Company
         </div>
         <div>
-            {{-- Optional additional content --}}
         </div>
     </div>
 </footer>

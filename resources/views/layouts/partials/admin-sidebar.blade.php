@@ -1,7 +1,10 @@
+<!-- Sidebar -->
 <div class="sidebar" data-background-color="dark">
     <div class="sidebar-logo">
+        <!-- Logo Header -->
         <div class="logo-header" data-background-color="dark">
-            <a href="{{ url('/') }}" class="logo"> {{-- Consider using named route like route('dashboard') or route('home') --}}
+            <a href="{{ route('dashboard') }}" class="logo">
+                {{-- Pastikan path ke logo Anda benar. Cek apakah di public/admin-template/img atau public/admin-template/assets/img --}}
                 <img
                     src="{{ asset('admin-template/img/kaiadmin/logo_light.svg') }}"
                     alt="navbar brand"
@@ -21,147 +24,100 @@
                 <i class="gg-more-vertical-alt"></i>
             </button>
         </div>
-        </div>
+        <!-- End Logo Header -->
+    </div>
     <div class="sidebar-wrapper scrollbar scrollbar-inner">
         <div class="sidebar-content">
             <ul class="nav nav-secondary">
-                <li class="nav-item @if(request()->routeIs('dashboard')) active @endif"> {{-- Example active state based on route name --}}
-                    <a href="{{ route('dashboard') }}"> {{-- Assuming you have a route named 'dashboard' --}}
+                <li class="nav-item @if(request()->routeIs('dashboard')) active @endif">
+                    <a href="{{ route('dashboard') }}">
                         <i class="fas fa-home"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
-                {{-- <li class="nav-item active"> --}}
-                {{--    <a
-                        data-bs-toggle="collapse"
-                        href="#dashboard"
-                        class="collapsed"
-                        aria-expanded="false"
-                    > --}}
-                {{--        <i class="fas fa-home"></i>
-                        <p>Dashboard</p>
-                        <span class="caret"></span> --}}
-                {{--    </a> --}}
-                {{--    <div class="collapse" id="dashboard">
-                        <ul class="nav nav-collapse">
-                            <li>
-                                <a href="../demo1/index.html"> {{-- Update this link --}}
-                                    <span class="sub-item">Dashboard 1</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div> --}}
-                {{-- </li> --}}
 
+                @if(Auth::user()->hasRole('member'))
                 <li class="nav-section">
-                    <span class="sidebar-mini-icon">
-                        <i class="fa fa-ellipsis-h"></i>
-                    </span>
-                    <h4 class="text-section">Manajemen Event</h4>
+                    <span class="sidebar-mini-icon"><i class="fa fa-ellipsis-h"></i></span>
+                    <h4 class="text-section">Event Saya</h4>
                 </li>
-
-                @if(Auth::check() && (Auth::user()->hasRole('administrator') || Auth::user()->hasRole('panitia')))
-                <li class="nav-item @if(request()->is('committee/events*') || request()->is('admin/events*')) active @endif">
-                    <a href="{{ Auth::user()->hasRole('administrator') ? route('admin.events.index') : route('committee.events.index') }}"> {{-- Adjust route names as needed --}}
-                        <i class="fas fa-calendar-alt"></i>
-                        <p>Kelola Event</p>
-                    </a>
-                </li>
-                @endif
-
-                @if(Auth::check() && Auth::user()->hasRole('member'))
-                <li class="nav-item @if(request()->is('member/events*') || request()->is('my-registrations*')) active @endif">
-                    <a data-bs-toggle="collapse" href="#memberEvents" class="@if(request()->is('member/events*') || request()->is('my-registrations*')) '' @else collapsed @endif" aria-expanded="@if(request()->is('member/events*') || request()->is('my-registrations*')) true @else false @endif">
+                <li class="nav-item @if(request()->is('member/*')) active @endif">
+                    <a data-bs-toggle="collapse" href="#memberMenu">
                         <i class="fas fa-calendar-check"></i>
-                        <p>Event Saya</p>
+                        <p>Navigasi Member</p>
                         <span class="caret"></span>
                     </a>
-                    <div class="collapse @if(request()->is('member/events*') || request()->is('my-registrations*')) show @endif" id="memberEvents">
+                    <div class="collapse @if(request()->is('member/*')) show @endif" id="memberMenu">
                         <ul class="nav nav-collapse">
-                            <li>
-                                <a href="{{ route('guest.events.index') }}"> {{-- Route to browse events --}}
-                                    <span class="sub-item">Cari Event</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('member.registrations.index') }}"> {{-- Route to member's registered events --}}
-                                    <span class="sub-item">Registrasi Saya</span>
-                                </a>
-                            </li>
+                            <li><a href="{{ route('guest.events.index') }}"><span class="sub-item">Cari Event</span></a></li>
+                            <li><a href="{{ route('member.registrations.index') }}"><span class="sub-item">Registrasi Saya</span></a></li>
                         </ul>
                     </div>
                 </li>
                 @endif
 
 
-                @if(Auth::check() && Auth::user()->hasRole('tim-keuangan'))
+                {{-- Menu untuk Panitia --}}
+                @if(Auth::user()->hasRole('panitia'))
+                <li class="nav-section">
+                    <span class="sidebar-mini-icon"><i class="fa fa-ellipsis-h"></i></span>
+                    <h4 class="text-section">Panitia</h4>
+                </li>
+                <li class="nav-item @if(request()->is('committee/events*')) active @endif">
+                    <a href="{{ route('committee.events.index') }}">
+                        <i class="fas fa-calendar-alt"></i>
+                        <p>Kelola Event</p>
+                    </a>
+                </li>
+                <li class="nav-item @if(request()->is('committee/attendance*')) active @endif">
+                    <a href="#"> {{-- Ganti dengan rute yang benar, contoh: route('committee.attendance.scan.page', ['event' => 1]) --}}
+                        <i class="fas fa-qrcode"></i>
+                        <p>Scan Kehadiran</p>
+                    </a>
+                </li>
+                @endif
+
+
+                @if(Auth::user()->hasRole('tim-keuangan'))
+                <li class="nav-section">
+                    <span class="sidebar-mini-icon"><i class="fa fa-ellipsis-h"></i></span>
+                    <h4 class="text-section">Keuangan</h4>
+                </li>
                 <li class="nav-item @if(request()->is('finance/verifications*')) active @endif">
-                    <a href="{{ route('finance.verifications.index') }}"> {{-- Adjust route name --}}
+                    <a href="{{ route('finance.verifications.index') }}">
                         <i class="fas fa-money-check-alt"></i>
                         <p>Verifikasi Pembayaran</p>
                     </a>
                 </li>
                 @endif
 
-                @if(Auth::check() && Auth::user()->hasRole('panitia'))
-                 <li class="nav-item @if(request()->is('committee/attendance*')) active @endif">
-                    <a href="#"> {{-- Add route for attendance scan page, e.g. for a specific event or a general scan page --}}
-                        <i class="fas fa-qrcode"></i>
-                        <p>Scan Kehadiran</p>
-                    </a>
-                </li>
-                <li class="nav-item @if(request()->is('committee/certificates*')) active @endif">
-                    <a href="#"> {{-- Add route for certificate management --}}
-                        <i class="fas fa-award"></i>
-                        <p>Upload Sertifikat</p>
-                    </a>
-                </li>
-                @endif
 
-
-                @if(Auth::check() && Auth::user()->hasRole('administrator'))
+                @if(Auth::user()->hasRole('administrator'))
                 <li class="nav-section">
-                    <span class="sidebar-mini-icon">
-                        <i class="fa fa-ellipsis-h"></i>
-                    </span>
+                    <span class="sidebar-mini-icon"><i class="fa fa-ellipsis-h"></i></span>
                     <h4 class="text-section">Administrasi</h4>
                 </li>
                 <li class="nav-item @if(request()->is('admin/users*')) active @endif">
-                    <a href="{{ route('admin.users.index') }}"> {{-- Adjust route name --}}
+                    <a href="{{ route('admin.users.index') }}">
                         <i class="fas fa-users-cog"></i>
                         <p>Manajemen Pengguna</p>
                     </a>
                 </li>
-                <li class="nav-item @if(request()->is('admin/roles*')) active @endif">
-                     <a href="#"> {{-- Add route for role management if needed --}}
+                <li class="nav-item @if(request()->is('admin/events*')) active @endif">
+                    <a href="{{ route('admin.events.index') }}">
+                        <i class="fas fa-calendar-alt"></i>
+                        <p>Kelola Semua Event</p>
+                    </a>
+                </li>
+                {{-- <li class="nav-item @if(request()->is('admin/roles*')) active @endif">
+                     <a href="#">
                         <i class="fas fa-user-tag"></i>
                         <p>Manajemen Peran</p>
                     </a>
-                </li>
-                @endif
-
-                {{-- Example of original menu items (remove or adapt as needed) --}}
-                {{-- <li class="nav-section">
-                    <span class="sidebar-mini-icon">
-                        <i class="fa fa-ellipsis-h"></i>
-                    </span>
-                    <h4 class="text-section">Components</h4>
-                </li>
-                <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#base">
-                        <i class="fas fa-layer-group"></i>
-                        <p>Base</p>
-                        <span class="caret"></span>
-                    </a>
-                    <div class="collapse" id="base">
-                        <ul class="nav nav-collapse">
-                            <li><a href="#"><span class="sub-item">Avatars</span></a></li>
-                            <li><a href="#"><span class="sub-item">Buttons</span></a></li>
-                        </ul>
-                    </div>
                 </li> --}}
-                {{-- Add more application-specific menu items here based on roles --}}
+                @endif
             </ul>
         </div>
     </div>
 </div>
+<!-- End Sidebar -->

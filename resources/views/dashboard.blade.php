@@ -149,10 +149,6 @@
 @push('scripts')
 {{-- Jika ada skrip khusus untuk halaman dashboard --}}
 {{-- <script>
-    // Contoh inisialisasi chart jika Anda menggunakannya di sini
-    // Pastikan jQuery dan Chart.js sudah dimuat di layout utama
-    // var statisticsChart = document.getElementById("statisticsChart").getContext("2d");
-    // new Chart(statisticsChart, { /* ... konfigurasi chart ... */ });
     console.log('Dashboard page specific script loaded.');
 </script> --}}
 @endpush
