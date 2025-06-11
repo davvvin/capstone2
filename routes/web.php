@@ -102,10 +102,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('committee')->name('committee.')->middleware(['role:panitia'])->group(function () {
         Route::get('/dashboard', [CommitteeDashboardController::class, 'index'])->name('dashboard'); // Dashboard khusus Panitia
         Route::resource('/events', CommitteeEventController::class); // CRUD Event oleh Panitia
+        Route::get('/events/create', [CommitteeEventController::class, 'create'])->name('events.create');
+        Route::post('/events/add', [CommitteeEventController::class, 'store'])->name('events.store');
 
         Route::get('/events/{event}/attendance/scan', [CommitteeAttendanceController::class, 'scanPage'])->name('attendance.scan.page');
         Route::post('/attendance/mark', [CommitteeAttendanceController::class, 'markAttendance'])->name('attendance.mark');
-
+        
         Route::get('/events/{event}/certificates', [CommitteeCertificateController::class, 'indexForEvent'])->name('certificates.indexForEvent');
         Route::get('/registrations/{registration}/certificate/create', [CommitteeCertificateController::class, 'create'])->name('certificates.create');
         Route::post('/registrations/{registration}/certificate', [CommitteeCertificateController::class, 'store'])->name('certificates.store');

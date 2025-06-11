@@ -24,7 +24,7 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.registrations.certificate.store', $registration->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('certificate.store', $registration->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
