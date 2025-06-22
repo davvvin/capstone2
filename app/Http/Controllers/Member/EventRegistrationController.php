@@ -153,4 +153,15 @@ class EventRegistrationController extends Controller
         return redirect()->back()->with('success', 'Sertifikat berhasil diunggah.');
     }
 
+    public function paymentDetail($id)
+    {
+        $registration = Registration::with('event', 'user')->findOrFail($id);
+
+        // Optional: check if the authenticated user is allowed to view it
+        if (auth()->id() !== $registration->user_id) {
+            abort(403, 'Unauthorized');
+        }
+
+        return view('member.registration.payment-detail', compact('registration'));
+    }
 }

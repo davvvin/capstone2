@@ -74,6 +74,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/events/{event}/register', [EventRegistrationController::class, 'create'])->name('events.register.create');
         Route::post('/events/{event}/register', [EventRegistrationController::class, 'store'])->name('events.register.store');
         Route::get('/my-registrations', [EventRegistrationController::class, 'myRegistrations'])->name('registrations.index');
+        Route::get('/member/registration/{id}/payment', [App\Http\Controllers\Member\RegistrationController::class, 'paymentDetail'])->name('member.registration.payment.detail');
         Route::get('/my-registrations/{registration}/payment', [EventRegistrationController::class, 'editPayment'])->name('registrations.payment.edit');
         Route::put('/my-registrations/{registration}/payment', [EventRegistrationController::class, 'updatePayment'])->name('registrations.payment.update');
         // Tambahkan rute lain untuk member jika ada
