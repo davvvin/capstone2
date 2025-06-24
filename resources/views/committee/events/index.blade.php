@@ -64,10 +64,13 @@
                                 @if($event->max_participants)
                                     / {{ $event->max_participants }}
                                 @endif
-                            </td>
+                            </td>                           
                             <td>
                                 <a href="{{ route('committee.events.show', $event->id) }}" class="btn btn-xs btn-primary">
                                     <i class="fa fa-users"></i> Peserta
+                                </a>
+                                <a href="{{ route('committee.attendance.scan', $event->id) }}" class="btn btn-xs btn-secondary"> {{-- TOMBOL BARU --}}
+                                    <i class="fa fa-qrcode"></i> Scan
                                 </a>
                                 <a href="{{ route('committee.events.edit', $event->id) }}" class="btn btn-xs btn-warning">
                                     <i class="fa fa-edit"></i> Edit

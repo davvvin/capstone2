@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Event; // Pastikan model Event di-import
+use App\Models\Event;
 use Illuminate\Http\Request;
 
 class GuestEventController extends Controller
 {
-    /**
-     * Menampilkan daftar semua event yang akan datang untuk guest.
-     */
     public function index()
     {
         $events = Event::where('event_date', '>=', now()) // <-- BAGIAN INI PENTING
@@ -19,15 +16,8 @@ class GuestEventController extends Controller
         return view('guest.events.index', compact('events'));
     }
 
-    /**
-     * Menampilkan detail satu event untuk guest.
-     */
-    public function show(Event $event) // Menggunakan Route Model Binding
+    public function show(Event $event)
     {
-        // Anda mungkin ingin memuat relasi lain jika diperlukan, contoh:
-        // $event->load('creator'); // Jika Anda ingin menampilkan info pembuat event (panitia)
-
-        // Asumsikan ada view 'guest.events.show'
         return view('guest.events.show', compact('event'));
     }
 }

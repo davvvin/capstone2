@@ -29,38 +29,20 @@ use App\Http\Controllers\Committee\EventController as CommitteeEventController;
 use App\Http\Controllers\Committee\AttendanceController as CommitteeAttendanceController;
 use App\Http\Controllers\Committee\CertificateController as CommitteeCertificateController;
 use App\Http\Controllers\Committee\DashboardController as CommitteeDashboardController;
+use App\Http\Controllers\Committee\AttendanceController; // <-- TAMBAHKAN BARIS INI
 
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
 
 // Guest Routes
 Route::get('/', [GuestEventController::class, 'index'])->name('home'); // Atau HomeController
 Route::get('/events', [GuestEventController::class, 'index'])->name('guest.events.index');
 Route::get('/events/{event}', [GuestEventController::class, 'show'])->name('guest.events.show');
 
-
-// Laravel Breeze Authentication Routes (biasanya sudah ada jika Anda menjalankan breeze:install)
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
-// Akan kita override di bawah dengan controller
-
 require __DIR__.'/auth.php'; // Ini memuat rute login, register, forgot password, dll. dari Breeze
 
 
 // Authenticated Routes (Semua pengguna yang sudah login dan terverifikasi)
 Route::middleware(['auth', 'verified'])->group(function () {
-    // Dashboard Umum (bisa diakses semua peran setelah login)
-    // Pastikan DashboardController ada dan memiliki metode index
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Profile Routes (dari Breeze)
@@ -82,14 +64,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Administrator Specific Routes
     Route::prefix('admin')->name('admin.')->middleware(['role:administrator'])->group(function () {
-        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard'); // Dashboard khusus Admin
-        Route::resource('/users', AdminUserController::class); // CRUD Pengguna
-        Route::resource('/roles', AdminRoleController::class)->except(['show']); // CRUD Peran (jika diperlukan)
-        Route::resource('/events', AdminEventController::class)->except(['show']); // Jika Admin bisa mengelola semua event
-        // Tambahkan rute lain untuk administrator
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard'); 
+        Route::resource('/users', AdminUserController::class); 
+        Route::resource('/roles', AdminRoleController::class)->except(['show']); 
+        Route::resource('/events', AdminEventController::class)->except(['show']); 
     });
 
-    // Finance Team Specific Routes
     Route::prefix('finance')->name('finance.')->middleware(['role:tim-keuangan'])->group(function () {
         Route::get('/dashboard', [FinanceDashboardController::class, 'index'])->name('dashboard'); // Dashboard khusus Tim Keuangan
         Route::get('/verifications', [PaymentVerificationController::class, 'index'])->name('verifications.index');
@@ -114,6 +94,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/registrations/{registration}/certificate', [CommitteeCertificateController::class, 'store'])->name('certificates.store');
         Route::get('/certificates/{certificate}/edit', [CommitteeCertificateController::class, 'edit'])->name('certificates.edit');
         Route::put('/certificates/{certificate}', [CommitteeCertificateController::class, 'update'])->name('certificates.update');
+
+        Route::get('/events/{event}/attendance/scan', [AttendanceController::class, 'scanPage'])->name('attendance.scan');
+
+        Route::post('/attendance/mark', [AttendanceController::class, 'markAttendance'])->name('attendance.mark');
+        
         // Tambahkan rute lain untuk panitia
     });
 });
