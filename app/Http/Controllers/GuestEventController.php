@@ -12,14 +12,10 @@ class GuestEventController extends Controller
      */
     public function index()
     {
-        $events = Event::where('event_date', '>=', now()) // Hanya event yang belum lewat tanggalnya
+        $events = Event::where('event_date', '>=', now()) // <-- BAGIAN INI PENTING
                         ->orderBy('event_date', 'asc')
-                        ->paginate(9); // Menampilkan 9 event per halaman, sesuaikan jika perlu
+                        ->paginate(9);
 
-        // Untuk halaman guest, kita mungkin tidak menggunakan layout admin.
-        // Jika Anda memiliki layout publik terpisah (misalnya, layouts.public), gunakan itu.
-        // Jika tidak, Anda bisa membuat view sederhana tanpa layout admin yang kompleks.
-        // Untuk contoh ini, kita asumsikan ada view 'guest.events.index'
         return view('guest.events.index', compact('events'));
     }
 
