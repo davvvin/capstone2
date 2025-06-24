@@ -91,7 +91,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         
         Route::get('/events/{event}/certificates', [CommitteeCertificateController::class, 'indexForEvent'])->name('certificates.indexForEvent');
         Route::get('/registrations/{registration}/certificate/create', [CommitteeCertificateController::class, 'create'])->name('certificates.create');
-        Route::post('/registrations/{registration}/certificate', [CommitteeCertificateController::class, 'store'])->name('certificates.store');
+        Route::post('/certificates', [CommitteeCertificateController::class, 'store'])->name('certificates.store');
         Route::get('/certificates/{certificate}/edit', [CommitteeCertificateController::class, 'edit'])->name('certificates.edit');
         Route::put('/certificates/{certificate}', [CommitteeCertificateController::class, 'update'])->name('certificates.update');
 

@@ -42,6 +42,7 @@
                                     <th>Status Pembayaran</th>
                                     <th>Kehadiran</th>
                                     <th>QR Code</th>
+                                    <th>Sertifikat</th> {{-- KOLOM BARU --}}
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -84,17 +85,26 @@
                                                 -
                                             @endif
                                         </td>
+                                        {{-- BAGIAN BARU UNTUK SERTIFIKAT --}}
+                                        <td>
+                                            @if ($registration->certificate && $registration->certificate->certificate_url)
+                                                <a href="{{ $registration->certificate->certificate_url }}" target="_blank" class="btn btn-sm btn-success">
+                                                    <i class="fa fa-download"></i> Unduh
+                                                </a>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
                                         <td>
                                             <a href="{{ route('guest.events.show', $registration->event_id) }}" class="btn btn-sm btn-info">Detail Event</a>
                                             @if ($registration->payment_status == 'rejected')
                                             <a href="{{ route('member.registrations.payment.edit', $registration->id) }}" class="btn btn-sm btn-warning mt-1">Upload Ulang Bukti</a>
                                             @endif
-                                            {{-- Tombol untuk download sertifikat jika sudah tersedia --}}
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="text-center">Anda belum mendaftar event apapun.</td>
+                                        <td colspan="7" class="text-center">Anda belum mendaftar event apapun.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
