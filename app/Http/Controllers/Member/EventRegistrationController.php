@@ -128,4 +128,40 @@ class EventRegistrationController extends Controller
 
         return redirect()->route('member.registrations.index')->with('success', 'Bukti pembayaran berhasil diupdate. Silakan tunggu verifikasi.');
     }
+
+    public function showUploadCertificate($id)
+    {
+        $registration = Registration::with('event', 'user')->findOrFail($id);
+        return view('admin.registrations.upload_certificate', compact('registration'));
+    }
+
+    public function storeCertificate(Request $request, $id)
+    {
+        $request->validate([
+            'certificate_file' => 'required|file|mimes:pdf|max:2048',
+        ]);
+
+        $registration = Registration::findOrFail($id);
+
+        // Store the uploaded file
+        if ($request->hasFile('certificate_file')) {
+            $path = $request->file('certificate_file')->store('certificates', 'public');
+            $registration->certificate_url = $path;
+            $registration->save();
+        }
+
+        return redirect()->back()->with('success', 'Sertifikat berhasil diunggah.');
+    }
+
+    public function paymentDetail($id)
+    {
+        $registration = Registration::with('event', 'user')->findOrFail($id);
+
+        // Optional: check if the authenticated user is allowed to view it
+        if (auth()->id() !== $registration->user_id) {
+            abort(403, 'Unauthorized');
+        }
+
+        return view('member.registration.payment-detail', compact('registration'));
+    }
 }

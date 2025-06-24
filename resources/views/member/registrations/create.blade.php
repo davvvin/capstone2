@@ -11,6 +11,20 @@
     </div>
 
     <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                 <div class="card-header"><h4 class="card-title">Poster Event</h4></div>
+                <div class="card-body">
+                     @if($event->poster_url)
+                        <img src="{{ asset('storage/' . $event->poster_url) }}" alt="Poster {{ $event->name }}" class="img-fluid rounded">
+                    @else
+                        <div class="w-full h-48 bg-gray-300 flex items-center justify-center rounded">
+                            <i class="fas fa-image fa-3x text-gray-500"></i>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
@@ -60,20 +74,6 @@
                             <a href="{{ route('guest.events.show', $event->id) }}" class="btn btn-secondary ms-2">Batal</a>
                         </div>
                     </form>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                 <div class="card-header"><h4 class="card-title">Poster Event</h4></div>
-                <div class="card-body">
-                     @if($event->poster_url)
-                        <img src="{{ asset('storage/' . $event->poster_url) }}" alt="Poster {{ $event->name }}" class="img-fluid rounded">
-                    @else
-                        <div class="w-full h-48 bg-gray-300 flex items-center justify-center rounded">
-                            <i class="fas fa-image fa-3x text-gray-500"></i>
-                        </div>
-                    @endif
                 </div>
             </div>
         </div>
