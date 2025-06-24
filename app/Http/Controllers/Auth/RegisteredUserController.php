@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Role; // 1. Import model Role
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -40,6 +41,14 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        $memberRole = Role::where('slug', 'member')->first();
+
+        if ($memberRole) {
+            $user->roles()->attach($memberRole->id);
+        } else {
+            \Log::warning("Peran 'member' tidak ditemukan saat registrasi pengguna baru.");
+        }
 
         event(new Registered($user));
 

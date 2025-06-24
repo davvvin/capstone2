@@ -1,7 +1,6 @@
 <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
     <div class="container-fluid">
-        {{-- Search Form (Optional) --}}
-        {{-- <nav class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
+        <nav class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
             <div class="input-group">
                 <div class="input-group-prepend">
                     <button type="submit" class="btn btn-search pe-1">
@@ -14,11 +13,10 @@
                     class="form-control"
                 />
             </div>
-        </nav> --}}
+        </nav>
 
         <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
-            {{-- Mobile Search Toggle (Optional) --}}
-            {{-- <li class="nav-item topbar-icon dropdown hidden-caret d-flex d-lg-none">
+            <li class="nav-item topbar-icon dropdown hidden-caret d-flex d-lg-none">
                 <a
                     class="nav-link dropdown-toggle"
                     data-bs-toggle="dropdown"
@@ -40,10 +38,9 @@
                         </div>
                     </form>
                 </ul>
-            </li> --}}
+            </li>
 
-            {{-- Messages Dropdown (Optional - Remove if not used) --}}
-            {{-- <li class="nav-item topbar-icon dropdown hidden-caret">
+            <li class="nav-item topbar-icon dropdown hidden-caret">
                 <a
                     class="nav-link dropdown-toggle"
                     href="#"
@@ -72,10 +69,9 @@
                     </li>
                     <li><a class="see-all" href="javascript:void(0);">See all messages<i class="fa fa-angle-right"></i></a></li>
                 </ul>
-            </li> --}}
+            </li>
 
-            {{-- Notifications Dropdown (Optional - Remove if not used) --}}
-            {{-- <li class="nav-item topbar-icon dropdown hidden-caret">
+            <li class="nav-item topbar-icon dropdown hidden-caret">
                 <a
                     class="nav-link dropdown-toggle"
                     href="#"
@@ -86,7 +82,7 @@
                     aria-expanded="false"
                 >
                     <i class="fa fa-bell"></i>
-                    <span class="notification">0</span> {{-- Update dynamically --}}
+                    <span class="notification">0</span> 
                 </a>
                 <ul
                     class="dropdown-menu notif-box animated fadeIn"
@@ -96,16 +92,15 @@
                     <li>
                         <div class="notif-scroll scrollbar-outer">
                             <div class="notif-center">
-                                {{-- Notifications items here --}}
+                                
                             </div>
                         </div>
                     </li>
                     <li><a class="see-all" href="javascript:void(0);">See all notifications<i class="fa fa-angle-right"></i></a></li>
                 </ul>
-            </li> --}}
+            </li> 
 
-            {{-- Quick Actions Dropdown (Optional - Remove if not used) --}}
-            {{-- <li class="nav-item topbar-icon dropdown hidden-caret">
+            <li class="nav-item topbar-icon dropdown hidden-caret">
                 <a
                     class="nav-link"
                     data-bs-toggle="dropdown"
@@ -125,9 +120,9 @@
                         </div>
                     </div>
                 </div>
-            </li> --}}
+            </li> 
 
-            @auth {{-- Display this only if user is authenticated --}}
+            @auth 
             <li class="nav-item topbar-user dropdown hidden-caret">
                 <a
                     class="dropdown-toggle profile-pic"
@@ -137,7 +132,7 @@
                 >
                     <div class="avatar-sm">
                         <img
-                            src="{{ asset('admin-template/img/profile.jpg') }}" {{-- Consider dynamic user avatar --}}
+                            src="{{ asset('admin-template/img/profile.jpg') }}"
                             alt="..."
                             class="avatar-img rounded-circle"
                         />
@@ -153,7 +148,7 @@
                             <div class="user-box">
                                 <div class="avatar-lg">
                                     <img
-                                        src="{{ asset('admin-template/img/profile.jpg') }}" {{-- Consider dynamic user avatar --}}
+                                        src="{{ asset('admin-template/img/profile.jpg') }}" Consider dynamic user avatar 
                                         alt="image profile"
                                         class="avatar-img rounded"
                                     />
@@ -161,17 +156,17 @@
                                 <div class="u-text">
                                     <h4>{{ Auth::user()->name }}</h4>
                                     <p class="text-muted">{{ Auth::user()->email }}</p>
-                                    {{-- <a href="{{ route('profile.edit') }}" class="btn btn-xs btn-secondary btn-sm">View Profile</a> --}}
+                                    <a href="{{ route('profile.edit') }}" class="btn btn-xs btn-secondary btn-sm">View Profile</a> 
                                 </div>
                             </div>
                         </li>
                         <li>
                             <div class="dropdown-divider"></div>
-                            {{-- <a class="dropdown-item" href="{{ route('profile.edit') }}">My Profile</a> --}}
-                            {{-- <a class="dropdown-item" href="#">My Balance</a> --}}
-                            {{-- <a class="dropdown-item" href="#">Inbox</a> --}}
-                            {{-- <div class="dropdown-divider"></div> --}}
-                            {{-- <a class="dropdown-item" href="#">Account Setting</a> --}}
+                            <a class="dropdown-item" href="{{ route('profile.edit') }}">My Profile</a> 
+                            <a class="dropdown-item" href="#">My Balance</a> 
+                            <a class="dropdown-item" href="#">Inbox</a> 
+                            <div class="dropdown-divider"></div> 
+                            <a class="dropdown-item" href="#">Account Setting</a> 
                             <div class="dropdown-divider"></div>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf

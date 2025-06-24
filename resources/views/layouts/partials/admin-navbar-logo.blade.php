@@ -1,6 +1,6 @@
 <div class="main-header-logo">
     <div class="logo-header" data-background-color="dark">
-        <a href="{{ url('/') }}" class="logo"> {{-- Consider using named route --}}
+        <a href="{{ url('/') }}" class="logo">
             <img
                 src="{{ asset('admin-template/img/kaiadmin/logo_light.svg') }}"
                 alt="navbar brand"

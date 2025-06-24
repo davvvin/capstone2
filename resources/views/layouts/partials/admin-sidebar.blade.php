@@ -4,7 +4,6 @@
         <!-- Logo Header -->
         <div class="logo-header" data-background-color="dark">
             <a href="{{ route('dashboard') }}" class="logo">
-                {{-- Pastikan path ke logo Anda benar. Cek apakah di public/admin-template/img atau public/admin-template/assets/img --}}
                 <img
                     src="{{ asset('admin-template/img/kaiadmin/logo_light.svg') }}"
                     alt="navbar brand"
@@ -57,7 +56,6 @@
                 @endif
 
 
-                {{-- Menu untuk Panitia --}}
                 @if(Auth::user()->hasRole('panitia'))
                 <li class="nav-section">
                     <span class="sidebar-mini-icon"><i class="fa fa-ellipsis-h"></i></span>
@@ -70,7 +68,7 @@
                     </a>
                 </li>
                 <li class="nav-item @if(request()->is('committee/attendance*')) active @endif">
-                    <a href="#"> {{-- Ganti dengan rute yang benar, contoh: route('committee.attendance.scan.page', ['event' => 1]) --}}
+                    <a href="#"> 
                         <i class="fas fa-qrcode"></i>
                         <p>Scan Kehadiran</p>
                     </a>
