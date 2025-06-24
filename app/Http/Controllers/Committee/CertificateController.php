@@ -8,54 +8,71 @@ use App\Models\EventRegistration;
 use App\Models\Certificate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage; // Import Storage facade
 
 class CertificateController extends Controller
 {
-    /**
-     * Menampilkan daftar peserta yang hadir dari sebuah event untuk manajemen sertifikat.
-     */
     public function indexForEvent(Event $event)
     {
-        // Pastikan panitia hanya bisa mengakses event yang mereka buat
+        // ... (logika indexForEvent tetap sama)
         if ($event->created_by !== Auth::id()) {
             abort(403);
         }
-
-        // Ambil registrasi yang sudah hadir dan muat relasi sertifikatnya
         $registrations = $event->registrations()
                                 ->with(['user', 'certificate'])
                                 ->where('is_attended', true)
                                 ->paginate(15);
-
         return view('committee.certificates.index', compact('event', 'registrations'));
     }
 
-    /**
-     * Menyimpan data sertifikat untuk sebuah registrasi.
-     */
     public function store(Request $request)
     {
-        $request->validate([
-            'registration_id' => 'required|exists:event_registrations,id',
-            'certificate_url' => 'required|url|max:255',
-        ]);
-
         $registration = EventRegistration::findOrFail($request->registration_id);
 
-        // Validasi: Pastikan panitia berwenang untuk event ini & peserta sudah hadir
+        // Validasi: pastikan panitia berwenang dan peserta hadir
         if ($registration->event->created_by !== Auth::id() || !$registration->is_attended) {
             return back()->with('error', 'Aksi tidak diizinkan.');
         }
 
-        // Gunakan updateOrCreate untuk membuat atau memperbarui sertifikat berdasarkan registration_id
-        Certificate::updateOrCreate(
-            ['event_registration_id' => $registration->id],
-            [
-                'certificate_url' => $request->certificate_url,
-                'uploaded_by' => Auth::id(),
-            ]
-        );
+        // Validasi input berdasarkan tipe upload
+        $request->validate([
+            'registration_id' => 'required|exists:event_registrations,id',
+            'certificate_upload_type' => 'required|in:url,file',
+            'certificate_url' => 'required_if:certificate_upload_type,url|nullable|url|max:255',
+            'certificate_file' => 'required_if:certificate_upload_type,file|nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
 
-        return back()->with('success', 'Sertifikat untuk ' . $registration->user->name . ' berhasil disimpan/diperbarui.');
+        $certificateUrlPath = null;
+        $certificateType = $request->certificate_upload_type;
+
+        // Handle jika tipe upload adalah file
+        if ($certificateType === 'file' && $request->hasFile('certificate_file')) {
+            // Cari sertifikat lama untuk dihapus filenya jika ada
+            $existingCertificate = Certificate::where('event_registration_id', $registration->id)->first();
+            if ($existingCertificate && $existingCertificate->certificate_type === 'file' && $existingCertificate->certificate_url) {
+                Storage::disk('public')->delete($existingCertificate->certificate_url);
+            }
+            // Simpan file baru dan dapatkan pathnya
+            $certificateUrlPath = $request->file('certificate_file')->store('certificates', 'public');
+        } 
+        // Handle jika tipe upload adalah URL
+        elseif ($certificateType === 'url') {
+            $certificateUrlPath = $request->certificate_url;
+        }
+
+        // Simpan atau update data sertifikat jika ada data baru
+        if ($certificateUrlPath) {
+            Certificate::updateOrCreate(
+                ['event_registration_id' => $registration->id],
+                [
+                    'certificate_url' => $certificateUrlPath,
+                    'certificate_type' => $certificateType,
+                    'uploaded_by' => Auth::id(),
+                ]
+            );
+            return back()->with('success', 'Sertifikat untuk ' . $registration->user->name . ' berhasil disimpan/diperbarui.');
+        }
+
+        return back()->with('error', 'Tidak ada link atau file yang diberikan.');
     }
 }

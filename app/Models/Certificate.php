@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Certificate extends Model
 {
     use HasFactory;
-    protected $fillable = ['event_registration_id', 'certificate_url', 'uploaded_by'];
+    protected $fillable = ['event_registration_id', 'certificate_url', 'certificate_type', 'uploaded_by'];
 
     public function eventRegistration()
     {
